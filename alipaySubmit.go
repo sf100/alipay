@@ -96,6 +96,7 @@ func AlipayToPay(orderId string, fee float32, nickname, subject string) string {
 	params["service"] = "create_direct_pay_by_user"
 	params["subject"] = subject
 	params["total_fee"] = strconv.FormatFloat(float64(fee), 'f', 2, 32)
-
+	params["defaultbank"] = "CCB"
+	params["paymethod"] = "bankPay" //选择网银支付
 	return BuildRequest(params, "get")
 }
