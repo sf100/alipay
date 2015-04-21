@@ -12,6 +12,7 @@ package alipay
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"strconv"
 )
@@ -80,12 +81,20 @@ func BuildRequest(sParaTemp map[string]string, strMethod string) string {
 }
 
 /**
-默认的支付功能，主要为提供即时到账使用，帮添加默认的请求参数
+默认的支付功能，主要为提供即时到账使用，帮添加默认的请求参数，可以自行掉BuildRequest方法构造支付表单
+@orderId 商品在商家平台上的ID
+@fee 交易金额
+@subject 交易说明
+@paymethod 支付方式，bankPay为网银支付，directPay 余额支付
+@defaultbank 银行简码，若为余额支付时可为空
 */
-func AlipayToPay(orderId string, fee float32, nickname, subject string) string {
+func AlipayToPay(orderId string, fee float64, subject, paymethod, defaultbank string) (string, error) {
 
+	if paymethod != "bankPay" && paymethod != "directPay" {
+		return "", errors.New("paymethod params is error")
+	}
 	params := map[string]string{}
-	params["body"] = "为" + nickname + "充值" + strconv.FormatFloat(float64(fee), 'f', 2, 32) + "元"
+	params["body"] = subject + ",交易金额：" + strconv.FormatFloat(fee, 'f', 2, 32) + "元"
 	params["_input_charset"] = alipayConfig.InputCharset
 	params["notify_url"] = alipayConfig.NotifyUrl
 	params["out_trade_no"] = orderId
@@ -96,7 +105,9 @@ func AlipayToPay(orderId string, fee float32, nickname, subject string) string {
 	params["service"] = "create_direct_pay_by_user"
 	params["subject"] = subject
 	params["total_fee"] = strconv.FormatFloat(float64(fee), 'f', 2, 32)
-	params["defaultbank"] = "CCB"
-	params["paymethod"] = "bankPay" //选择网银支付
-	return BuildRequest(params, "get")
+	if paymethod == "bankPay" && len(defaultbank) != 0 { //网银支付
+		params["defaultbank"] = defaultbank
+	}
+	params["paymethod"] = paymethod
+	return BuildRequest(params, "get"), nil
 }
