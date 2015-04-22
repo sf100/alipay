@@ -27,7 +27,6 @@ var HTTPS_VERIFY_URL = "https://mapi.alipay.com/gateway.do?service=notify_verify
  */
 func Verify(params map[string]string) bool {
 
-	fmt.Println(params)
 	var responseTxt string
 	if len(params["notify_id"]) > 0 {
 		notify_id := params["notify_id"]
@@ -35,11 +34,9 @@ func Verify(params map[string]string) bool {
 	} else {
 		return false
 	}
-	fmt.Println(responseTxt)
 
 	sign := params["sign"]
 	isSign := GetSignVeryfy(params, sign)
-	fmt.Println(isSign)
 	if isSign && responseTxt == "true" {
 		return true
 	} else {
@@ -58,8 +55,11 @@ func GetSignVeryfy(params map[string]string, sign string) bool {
 
 	parasNew := ParaFilter(params)
 	preSignStr := CreateLinkString(parasNew)
+	fmt.Println(params)
 	if alipayConfig.SignType == "MD5" {
 		newSign := Sign(preSignStr, alipayConfig.Key)
+		fmt.Println(newSign)
+		fmt.Println(sign)
 		if newSign == sign {
 			return true
 		}
@@ -100,29 +100,17 @@ status 返回支付结果
 orderId 商品订单ID
 buyerEmail 买家邮箱
 tradeNo 支付宝的订单号
+return 不管支付是否成功，都返回支付返回的订单信息，给使用着，方便调用者做记录
 */
 func AlipayReturn(request *http.Request) (status bool, orderId, buyerEmail, tradeNo string) {
 
 	params := make(map[string]string, 19)
 	request.ParseForm()
-	params["body"] = request.Form.Get("body")
-	params["buyer_email"] = request.Form.Get("buyer_email")
-	params["buyer_id"] = request.Form.Get("buyer_id")
-	params["exterface"] = request.Form.Get("exterface")
-	params["is_success"] = request.Form.Get("is_success")
-	params["notify_id"] = request.Form.Get("notify_id")
-	params["notify_time"] = request.Form.Get("notify_time")
-	params["notify_type"] = request.Form.Get("notify_type")
-	params["out_trade_no"] = request.Form.Get("out_trade_no")
-	params["payment_type"] = request.Form.Get("payment_type")
-	params["seller_email"] = request.Form.Get("seller_email")
-	params["seller_id"] = request.Form.Get("seller_id")
-	params["subject"] = request.Form.Get("subject")
-	params["total_fee"] = request.Form.Get("total_fee")
-	params["trade_no"] = request.Form.Get("trade_no")
-	params["trade_status"] = request.Form.Get("trade_status") //交易状态 TRADE_FINISHED或TRADE_SUCCESS表示交易成功
-	params["sign"] = request.Form.Get("sign")
-	params["sign_type"] = request.Form.Get("sign_type")
+	urlValus := request.Form
+
+	for k, v := range urlValus {
+		params[k] = strings.Join(v, "")
+	}
 
 	if len(params["out_trade_no"]) == 0 {
 
@@ -135,13 +123,10 @@ func AlipayReturn(request *http.Request) (status bool, orderId, buyerEmail, trad
 			if params["trade_status"] == "TRADE_FINISHED" || params["trade_status"] == "TRADE_SUCCESS" {
 				return true, params["out_trade_no"], params["buyer_email"], params["trade_no"]
 			} else {
-				status = false
-				return
+				return false, params["out_trade_no"], params["buyer_email"], params["trade_no"]
 			}
 		} else {
-			fmt.Println("合法失败")
-			status = false
-			return
+			return false, params["out_trade_no"], params["buyer_email"], params["trade_no"]
 		}
 	}
 
