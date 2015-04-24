@@ -11,7 +11,8 @@ buildRequest(String strParaFileName, String strFilePath,Map<String, String> sPar
 
 ```
 /* 建立请求，以模拟远程HTTP的POST请求方式构造并获取支付宝的处理结果 */
-buildRequest(Map<String, String> sParaTemp, String strMethod, String strButtonName, String strParaFileName)
+buildRequest(Map<String, String> sParaTemp, String strMethod, 
+             String strButtonName, String strParaFileName)
 ```
 
 # 开源协议
