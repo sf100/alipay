@@ -1,5 +1,4 @@
 # Alipay Go SDK
-----
 
 ## 简介
 
