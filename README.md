@@ -1,4 +1,7 @@
 # Alipay Go SDK
+----
+
+## 简介
 
 **默认带有支持即时到账、网银支付的方法**
 
@@ -15,6 +18,6 @@ buildRequest(Map<String, String> sParaTemp, String strMethod,
              String strButtonName, String strParaFileName)
 ```
 
-# 开源协议
+## 开源协议
 
 该源码使用 [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt) 开源。
