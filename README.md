@@ -11,7 +11,7 @@
 * `buildRequest(Map<String, String> sParaTemp, String strMethod, String strButtonName, String strParaFileName)`
 
 ## Examples
-* 请参考test/testMain.go
+* 请参考test/testMain.go；代码都中有相应的注解，方便大家了解方法的使用
 * 如果AlipayToPay支付方法不满足需求，可根据自己的参数需求调用BuildRequest方法来构造提交支付宝的表单
 
 
