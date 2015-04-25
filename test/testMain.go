@@ -35,6 +35,7 @@ func pay(w http.ResponseWriter, r *http.Request) {
 	CheckErr(err)
 	formHtml := template.HTML(form)
 	t.Execute(w, formHtml)
+
 }
 
 /*页面跳转同步通知*/
