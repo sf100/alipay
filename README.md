@@ -10,6 +10,9 @@
 /* 建立请求，以模拟远程HTTP的POST请求方式构造并获取支付宝的处理结果 */
 `buildRequest(Map<String, String> sParaTemp, String strMethod, String strButtonName, String strParaFileName)`
 
+示例：即时到账收款接口
+======
+shi
 # 开源协议
 
 该源码使用 [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt) 开源。
