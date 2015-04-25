@@ -10,10 +10,9 @@
 /* 建立请求，以模拟远程HTTP的POST请求方式构造并获取支付宝的处理结果 */
 `buildRequest(Map<String, String> sParaTemp, String strMethod, String strButtonName, String strParaFileName)`
 
-example
-======
-请参考test/testMain.go
-如果AlipayToPay支付方法不满足需求，可根据自己的参数需求调用BuildRequest方法来构造提交支付宝的表单
+## Examples
+  请参考test/testMain.go
+  如果AlipayToPay支付方法不满足需求，可根据自己的参数需求调用BuildRequest方法来构造提交支付宝的表单
 
 
 # 开源协议
